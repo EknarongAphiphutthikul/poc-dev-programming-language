@@ -19,6 +19,7 @@ class GetResourceUtils {
     fun getResourceAtDemoFromCommonLib(filename: String): String {
         logger.info(Thread.currentThread().contextClassLoader.getResource("demo/$filename").path)
         logger.info(GetResourceUtils::class.java.classLoader.getResource("demo/$filename").path)
-        return GetResourceUtils::class.java.classLoader.getResource("demo/$filename").readText()
+        logger.info(this.javaClass.classLoader.getResource("demo/$filename").path)
+        return this.javaClass.classLoader.getResource("demo/$filename").readText()
     }
 }
