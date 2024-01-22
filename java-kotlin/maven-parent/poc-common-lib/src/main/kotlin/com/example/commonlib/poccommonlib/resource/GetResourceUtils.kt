@@ -15,7 +15,7 @@ class GetResourceUtils {
         return GetResourceUtils::class.java.classLoader.getResource("common/$filename").readText()
     }
 
-    // get resource file from src/main/resources in jar file of poc-common-lib
+    // get resource file from src/main/resources in jar file of demo-use-common-lib-parent
     fun getResourceAtDemoFromCommonLib(filename: String): String {
         logger.info(Thread.currentThread().contextClassLoader.getResource("demo/$filename").path)
         logger.info(GetResourceUtils::class.java.classLoader.getResource("demo/$filename").path)
