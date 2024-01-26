@@ -37,4 +37,10 @@ class GetResourceController {
     fun getResourceAtDemoFromCommonLib(@PathVariable filename: String): String {
         return commonLibGetResourceUtils.getResourceAtDemoFromCommonLib(filename)
     }
+
+    @GetMapping(EndpointConstant.JASPER_TEMPLATE + "/{filename}")
+    fun getResourceJasperTemplate(@PathVariable filename: String): String {
+        return commonLibGetResourceUtils.getResourceJasperTemplateAtDemoFromCommonLib(filename).readBytes().toString(
+            Charsets.UTF_8)
+    }
 }
