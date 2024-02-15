@@ -4,7 +4,9 @@ import (
 	"context"
 	"github.com/sirupsen/logrus"
 	"os"
+	"poc-db-on-memory/file"
 	"poc-db-on-memory/mem_db"
+	"time"
 )
 
 var (
@@ -32,7 +34,76 @@ func destroy() {
 func main() {
 	logger.Infof("Starting application")
 	defer destroy()
+	process()
 	logger.Infof("Exiting application")
+}
+
+func process() {
+	err := execCreateTable()
+	if err != nil {
+		logger.Errorf("ExecCreateTable Error %v", err)
+	}
+
+	sourceFile := ""
+	err = readSqlStatementFromFileAndExecInsertData(sourceFile)
+	if err != nil {
+		logger.Errorf("ReadSqlStatementFromFileAndExecInsertData Error %v", err)
+	}
+
+	err = checkDataAfterInsertData()
+	if err != nil {
+		logger.Errorf("CheckDataAfterInsertData Error %v", err)
+	}
+}
+
+func checkDataAfterInsertData() error {
+	data, err := dbServer.Query("select column_name from table_name where column_name = ?")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = data.Close() }()
+
+	for data.Next() {
+		var valueColumnName string
+		err = data.Scan(&valueColumnName)
+		if err != nil {
+			return err
+		}
+		logger.Infof("columnName %v", valueColumnName)
+	}
+	return nil
+}
+
+func execCreateTable() error {
+	_, err := dbServer.Exec("")
+	return err
+}
+
+func readSqlStatementFromFileAndExecInsertData(sourceFile string) error {
+	t1 := time.Now()
+	maximumBufferSize := 1024 * 1024 * 2 // 2MB
+	sourceOS, err := file.OpenFile(sourceFile, os.O_RDONLY)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = sourceOS.Close() }()
+
+	scanner := file.InitialBufferScanner(sourceOS, maximumBufferSize)
+	for scanner.Scan() {
+		err = execInsertData(scanner.Text())
+		if err != nil {
+			logger.Errorf("ExecInsertData Error %v", err)
+		}
+	}
+	logger.Infof("ReadSqlStatementFromFileAndExecInsertData Time %v", time.Since(t1))
+	return nil
+}
+
+func execInsertData(statement string) error {
+	t1 := time.Now()
+	_, err := dbServer.Exec(statement)
+	logger.Infof("ExecInsertData Time %v", time.Since(t1))
+	return err
 }
 
 func startDatabaseOnMemory(ctx context.Context, dbPort int, dbName string) mem_db.MemDB {
@@ -52,6 +123,6 @@ func startDatabaseOnMemory(ctx context.Context, dbPort int, dbName string) mem_d
 func initLogRus(ctx context.Context) logrus.FieldLogger {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetLevel(logrus.InfoLevel)
 	return logrus.WithContext(ctx)
 }
