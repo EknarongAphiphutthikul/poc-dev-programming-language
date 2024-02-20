@@ -6,6 +6,7 @@ import (
 	"os"
 	"poc-db-on-memory/file"
 	"poc-db-on-memory/mem_db"
+	"runtime"
 	"time"
 )
 
@@ -34,8 +35,18 @@ func destroy() {
 func main() {
 	logger.Infof("Starting application")
 	defer destroy()
+	monitorMemoryUsage()
 	process()
 	logger.Infof("Exiting application")
+}
+
+func monitorMemoryUsage() {
+	ticker := time.NewTicker(5 * time.Second)
+	go func() {
+		for range ticker.C {
+			PrintMemUsage()
+		}
+	}()
 }
 
 func process() {
@@ -57,25 +68,33 @@ func process() {
 }
 
 func checkDataAfterInsertData() error {
-	data, err := dbServer.Query("select column_name from table_name where column_name = ?")
+	t1 := time.Now()
+	data, err := dbServer.Query("")
 	if err != nil {
 		return err
 	}
 	defer func() { _ = data.Close() }()
 
 	for data.Next() {
-		var valueColumnName string
-		err = data.Scan(&valueColumnName)
+		var countData int
+		err = data.Scan(&countData)
 		if err != nil {
 			return err
 		}
-		logger.Infof("columnName %v", valueColumnName)
+		logger.Infof("checkDataAfterInsertData Time %v, countData %v", time.Since(t1), countData)
 	}
 	return nil
 }
 
 func execCreateTable() error {
 	_, err := dbServer.Exec("")
+	return err
+}
+
+func execTruncate() error {
+	t1 := time.Now()
+	_, err := dbServer.Exec("")
+	logger.Infof("ExecTruncate Time %v", time.Since(t1))
 	return err
 }
 
@@ -90,12 +109,53 @@ func readSqlStatementFromFileAndExecInsertData(sourceFile string) error {
 
 	scanner := file.InitialBufferScanner(sourceOS, maximumBufferSize)
 	for scanner.Scan() {
+		err = execTruncate()
+		if err != nil {
+			logger.Errorf("ExecTruncate Error %v", err)
+		}
 		err = execInsertData(scanner.Text())
 		if err != nil {
 			logger.Errorf("ExecInsertData Error %v", err)
 		}
+		err = checkDataAfterInsertData()
+		if err != nil {
+			logger.Errorf("CheckDataAfterInsertData Error %v", err)
+		}
+		err = execQueryData()
+		if err != nil {
+			logger.Errorf("ExecQueryData Error %v", err)
+		}
+		err = execQueryIntoOutFile()
+		if err != nil {
+			logger.Errorf("ExecQueryIntoOutFile Error %v", err)
+		}
 	}
 	logger.Infof("ReadSqlStatementFromFileAndExecInsertData Time %v", time.Since(t1))
+	return nil
+}
+
+func execQueryIntoOutFile() error {
+	t1 := time.Now()
+	_, err := dbServer.Exec("")
+	logger.Infof("ExecQueryIntoOutFile Time %v", time.Since(t1))
+	return err
+}
+
+func execQueryData() error {
+	t1 := time.Now()
+	data, err := dbServer.Query("")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = data.Close() }()
+	var dataKey string
+	for data.Next() {
+		err = data.Scan(&dataKey)
+		if err != nil {
+			return err
+		}
+	}
+	logger.Infof("execQueryData Time %v", time.Since(t1))
 	return nil
 }
 
@@ -125,4 +185,22 @@ func initLogRus(ctx context.Context) logrus.FieldLogger {
 	logrus.SetOutput(os.Stdout)
 	logrus.SetLevel(logrus.InfoLevel)
 	return logrus.WithContext(ctx)
+}
+
+func bToMb(b uint64) uint64 {
+	return b / 1024 / 1024
+}
+
+func PrintMemUsage() {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	logger.Infof("Alloc = %v MiB\tTotalAlloc = %v MiB\tSys = %v MiB\tHeapAlloc = %v MiB\tHeapInuse = %v MiB\tHeapIdle = %v MiB\tHeapReleased = %v MiB\tNumGC = %v\n",
+		bToMb(m.Alloc),
+		bToMb(m.TotalAlloc),
+		bToMb(m.Sys),
+		bToMb(m.HeapAlloc),
+		bToMb(m.HeapInuse),
+		bToMb(m.HeapIdle),
+		bToMb(m.HeapReleased),
+		m.NumGC)
 }
