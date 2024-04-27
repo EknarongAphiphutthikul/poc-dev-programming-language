@@ -32,6 +32,16 @@ public class ExampleAspect {
 
     @After("execution(* org.example.aopjava.service.ExampleService.exampleMethod())")
     public void afterExampleMethod() {
-       log.info("After exampleMethod called");
+        log.info("After exampleMethod called");
+    }
+
+    @Before("execution(* org.example.aopjava.service.ExampleService.exampleMethodAsync())")
+    public void beforeExampleMethodAsync() {
+        log.info("Before exampleMethodAsync called");
+    }
+
+    @After("execution(* org.example.aopjava.service.ExampleService.exampleMethodAsync())")
+    public void afterExampleMethodAsync() {
+        log.info("After exampleMethodAsync called");
     }
 }
