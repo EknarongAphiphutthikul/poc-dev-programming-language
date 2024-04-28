@@ -35,6 +35,7 @@ public class ExampleController {
     @GetMapping("/persons-pk-auto-in")
     public String personPkAutoIn() {
         PersonsPkAutoIn en = new PersonsPkAutoIn();
+        en.setPersonId(3);
         en.setAge(10);
         en.setFirstName("firstname");
         en.setLastName("lastname");
