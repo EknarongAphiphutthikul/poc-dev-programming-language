@@ -1,7 +1,6 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -14,24 +13,11 @@ target/
 .springBeans
 .sts4-cache
 
-**/.apt_generated
-**/.classpath
-**/.factorypath
-**/.project
-**/.settings
-**/.springBeans
-**/.sts4-cache
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
-
-**/.idea
-**/*.iws
-**/*.iml
-**/*.ipr
 
 ### NetBeans ###
 /nbproject/private/
@@ -43,15 +29,5 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-**/nbproject/private/
-**/nbbuild/
-**/dist/
-**/nbdist/
-**/.nb-gradle/
-**/build/
-
 ### VS Code ###
 .vscode/
-
-**/.vscode/
-java-kotlin/kotlin-rest-springboot/.mvn
