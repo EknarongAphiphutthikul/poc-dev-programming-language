@@ -27,6 +27,7 @@ import kotlin.collections.HashMap
 private val PATTERN_EXTRACT_NUMBER = Pattern.compile("\\d+")
 
 @ControllerAdvice
+//@RestControllerAdvice
 open class LogInterceptor(
     private val objectMapper: ObjectMapper = ObjectMapper(),
     private val appName: String = "appName"
