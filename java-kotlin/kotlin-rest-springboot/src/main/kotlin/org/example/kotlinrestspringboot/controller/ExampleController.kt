@@ -5,6 +5,7 @@ import org.example.kotlinrestspringboot.model.ModelRequest
 import org.example.kotlinrestspringboot.model.ModelResponse
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 
 @RestController
@@ -20,14 +21,14 @@ class ExampleController {
     }
 
     @PostMapping("/post")
-    fun post(@RequestBody req: ModelRequest): ModelResponse {
-        log.info("Post method with req: ${req.req}")
+    fun post(@RequestBody req: ModelRequest?): ModelResponse {
+        log.info("Post method with req: ${req?.req}")
         return ModelResponse("200")
     }
 
     @PatchMapping("/patch")
-    fun patch(@RequestParam data: ModelRequest): ModelResponse {
-        log.info("Patch method with req: ${data.req}")
+    fun patch(@RequestParam data: ModelRequest?, @RequestParam files: Array<MultipartFile>?): ModelResponse {
+        log.info("Patch method with req: ${data?.req} total file: ${files?.size}")
         return ModelResponse("200")
     }
 
