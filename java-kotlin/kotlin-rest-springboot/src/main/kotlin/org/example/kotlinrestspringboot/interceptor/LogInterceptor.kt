@@ -135,7 +135,10 @@ open class LogInterceptor(
     protected open fun buildBodyApplicationJson(httpServletRequest: HttpServletRequest): String {
         when(httpServletRequest){
             is ContentCachingRequestWrapper -> {
-                return httpServletRequest.contentAsString.replace("\n", "")
+//                return httpServletRequest.contentAsString.replace("\n", "")
+                return httpServletRequest.contentAsByteArray.takeIf { it.isNotEmpty() }?.let {
+                    String(it).replace("\n", "")
+                }?: ""
             }
             else -> {
                 throw IllegalArgumentException("Unsupported request type, expected ContentCachingRequestWrapper but got ${httpServletRequest.javaClass.simpleName}")
