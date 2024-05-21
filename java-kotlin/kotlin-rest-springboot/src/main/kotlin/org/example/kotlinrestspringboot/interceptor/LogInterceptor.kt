@@ -147,23 +147,26 @@ open class LogInterceptor(
     }
 
     protected open fun buildBodyMultipartFormData(httpServletRequest: HttpServletRequest): String {
-        val multipartRequest = httpServletRequest as StandardMultipartHttpServletRequest
         val multipartMapRequest = mutableMapOf<String, String>()
 
-        multipartRequest.parameterMap.takeUnless{ it.isEmpty() }?.map { it.key to it.value.let { values ->
-            when(values.size) {
-                1 -> values[0]
-                else -> values.toList().toString()
+        when (httpServletRequest) {
+            is StandardMultipartHttpServletRequest -> {
+                httpServletRequest.parameterMap.takeUnless{ it.isEmpty() }?.map { it.key to it.value.let { values ->
+                    when(values.size) {
+                        1 -> values[0]
+                        else -> values.toList().toString()
+                    }
+                }
+                }?.toMap().also { multipartMapRequest.putAll(it ?: emptyMap()) }
+
+                httpServletRequest.multiFileMap.takeUnless{ it.isEmpty() }?.map { it.key to it.value.let { files ->
+                    files.map { file ->
+                        "${file.originalFilename} size: ${file.size} bytes"
+                    }.toList().toString()
+                }
+                }?.toMap().also { multipartMapRequest.putAll(it ?: emptyMap()) }
             }
         }
-        }?.toMap().also { multipartMapRequest.putAll(it ?: emptyMap()) }
-
-        multipartRequest.multiFileMap.takeUnless{ it.isEmpty() }?.map { it.key to it.value.let { files ->
-            files.map { file ->
-                "${file.originalFilename} size: ${file.size} bytes"
-            }.toList().toString()
-        }
-        }?.toMap().also { multipartMapRequest.putAll(it ?: emptyMap()) }
 
         return multipartMapRequest.takeIf { multipartMapRequest.isNotEmpty() }?.let {
             StringBuilder("multipart form data: $multipartMapRequest").toString()
