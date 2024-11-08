@@ -1,0 +1,1 @@
+mockgen  -destination=./mock/service/service_mock.go -package=mock_service poc-go-mock/service IService
