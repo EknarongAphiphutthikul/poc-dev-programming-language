@@ -1,0 +1,73 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: rate-limit-service
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=60m
+
+bucket4j:
+  enabled: true
+  cache-to-use: jcache
+  default-metric-tags:
+    - key: app-name
+      expression: ${spring.application.name}
+    - key: cache-names
+      expression: ${spring.cache.cache-names}
+    - key: api
+      expression: getRequestURL()
+  filters:
+    - id: api-external
+      cache-name: rate-limit-buckets
+      filter-method: servlet
+      http-content-type: application/json
+      http-status-code: TOO_MANY_REQUESTS
+      http-response-body: '{"message": "Rate limit exceeded"}'
+      url: ^/api/external/.*$
+      strategy: first
+      rate-limits:
+        - cache-key: getRequestURL()
+          bandwidths:
+            - capacity: 2
+              time: 1
+              unit: minutes
+              refill-speed: interval
+      metrics:
+        enabled: true
+        types:
+          - CONSUMED_COUNTER
+          - REJECTED_COUNTER
+    - id: api-internal
+      cache-name: rate-limit-buckets
+      filter-method: servlet
+      http-content-type: application/json
+      http-status-code: TOO_MANY_REQUESTS
+      http-response-body: '{"message": "API Internal Rate limit exceeded"}'
+      url: ^/api/internal/.*$
+      strategy: first
+      rate-limits:
+        - cache-key: getRequestURL()
+          bandwidths:
+            - capacity: 2
+              time: 1
+              unit: minutes
+              refill-speed: interval
+      metrics:
+        enabled: true
+        types:
+          - CONSUMED_COUNTER
+          - REJECTED_COUNTER
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
