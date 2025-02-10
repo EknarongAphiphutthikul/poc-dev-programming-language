@@ -15,12 +15,14 @@ bucket4j:
   enabled: true
   cache-to-use: jcache
   default-metric-tags:
-    - key: app-name
-      expression: ${spring.application.name}
-    - key: cache-names
-      expression: ${spring.cache.cache-names}
-    - key: api
+    - key: endpoint
       expression: getRequestURL()
+      types:
+        - CONSUMED_COUNTER
+        - REJECTED_COUNTER
+        - PARKED_COUNTER
+        - INTERRUPTED_COUNTER
+        - DELAYED_COUNTER
   filters:
     - id: api-external
       cache-name: rate-limit-buckets
@@ -28,6 +30,7 @@ bucket4j:
       http-content-type: application/json
       http-status-code: TOO_MANY_REQUESTS
       http-response-body: '{"message": "Rate limit exceeded"}'
+      hide-http-response-headers: true
       url: ^/api/external/.*$
       strategy: first
       rate-limits:
@@ -39,15 +42,22 @@ bucket4j:
               refill-speed: interval
       metrics:
         enabled: true
-        types:
-          - CONSUMED_COUNTER
-          - REJECTED_COUNTER
+#        types:
+#          - CONSUMED_COUNTER
+#          - REJECTED_COUNTER
+#          - PARKED_COUNTER
+#          - INTERRUPTED_COUNTER
+#          - DELAYED_COUNTER
+#        tags:
+#          - key: endpoint
+#            expression: getRequestURL()
     - id: api-internal
       cache-name: rate-limit-buckets
       filter-method: servlet
       http-content-type: application/json
       http-status-code: TOO_MANY_REQUESTS
       http-response-body: '{"message": "API Internal Rate limit exceeded"}'
+      hide-http-response-headers: true
       url: ^/api/internal/.*$
       strategy: first
       rate-limits:
@@ -59,9 +69,15 @@ bucket4j:
               refill-speed: interval
       metrics:
         enabled: true
-        types:
-          - CONSUMED_COUNTER
-          - REJECTED_COUNTER
+#        types:
+#          - CONSUMED_COUNTER
+#          - REJECTED_COUNTER
+#          - PARKED_COUNTER
+#          - INTERRUPTED_COUNTER
+#          - DELAYED_COUNTER
+#        tags:
+#          - key: endpoint
+#            expression: getRequestURL()
 
 management:
   endpoints:
