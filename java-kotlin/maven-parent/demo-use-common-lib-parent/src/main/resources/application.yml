@@ -61,7 +61,7 @@ bucket4j:
       url: ^/api/internal/.*$
       strategy: first
       rate-limits:
-        - cache-key: getRequestURL()
+        - cache-key: "@bucket4jCacheKey.getKeyByParamAndUrl(#this)"
           bandwidths:
             - capacity: 2
               time: 1
