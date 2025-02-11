@@ -15,16 +15,16 @@ class InternalController {
     lateinit var bucket4jResponse: Bucket4jResponse
 
     @RateLimiting(name = "api-internal",
-            cacheKey = "#timeSleep",
+            cacheKey = "'hello' + #userId",
             fallbackMethodName = "myFallbackMethod"
     )
     @GetMapping("/hello")
-    fun hello(request: HttpServletRequest, @RequestParam timeSleep: Long): String {
+    fun hello(request: HttpServletRequest, @RequestParam timeSleep: Long, @RequestParam("user-id") userId: String): String {
         TimeUnit.SECONDS.sleep(timeSleep)
-        return "Hello from internal controller"
+        return "Hello from internal controller + $userId"
     }
 
-    fun myFallbackMethod(request: HttpServletRequest, timeSleep: Long): String {
+    fun myFallbackMethod(request: HttpServletRequest, timeSleep: Long, userId: String): String {
         return bucket4jResponse.getResponse(request)
     }
 }
