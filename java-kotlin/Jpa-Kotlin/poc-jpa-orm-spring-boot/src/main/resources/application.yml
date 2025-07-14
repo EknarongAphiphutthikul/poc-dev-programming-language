@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: poc-jpa-orm-spring-boot
