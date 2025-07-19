@@ -3,8 +3,8 @@ package th.eknarong.aph.poc.backup.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import th.eknarong.aph.poc.backup.dto.*
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.Order
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.Order
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.OrderStatus
 import th.eknarong.aph.poc.backup.repository.OrderRepository
 import th.eknarong.aph.poc.backup.repository.ProductRepository
 import th.eknarong.aph.poc.backup.repository.UserRepository

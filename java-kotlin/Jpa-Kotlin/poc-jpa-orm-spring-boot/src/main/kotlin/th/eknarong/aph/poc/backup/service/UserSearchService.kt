@@ -3,9 +3,9 @@ package th.eknarong.aph.poc.backup.service
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.*
 import org.springframework.stereotype.Service
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.OrderStatus
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.User
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.UserProfile
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.User
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.UserProfile
 import java.math.BigDecimal
 import java.time.LocalDateTime
 

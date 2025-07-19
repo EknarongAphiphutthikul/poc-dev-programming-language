@@ -3,7 +3,7 @@ package th.eknarong.aph.poc.backup.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import th.eknarong.aph.poc.backup.dto.*
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.Product
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.Product
 import th.eknarong.aph.poc.backup.repository.ProductRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -1,4 +1,4 @@
-package th.eknarong.aph.poc.pocjpaormspringboot.entity
+package th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional
 
 import jakarta.persistence.*
 import java.time.LocalDate

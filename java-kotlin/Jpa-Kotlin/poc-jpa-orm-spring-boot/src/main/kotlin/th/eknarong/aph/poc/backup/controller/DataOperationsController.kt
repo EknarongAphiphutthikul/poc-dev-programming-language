@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import th.eknarong.aph.poc.backup.dto.*
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.OrderStatus
 import th.eknarong.aph.poc.backup.service.OrderService
 import th.eknarong.aph.poc.backup.service.ProductService
 import th.eknarong.aph.poc.backup.service.UserService

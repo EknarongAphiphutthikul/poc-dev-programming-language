@@ -3,8 +3,8 @@ package th.eknarong.aph.poc.backup.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import th.eknarong.aph.poc.backup.dto.*
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.User
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.UserProfile
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.User
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.UserProfile
 import th.eknarong.aph.poc.backup.repository.UserRepository
 import th.eknarong.aph.poc.backup.repository.UserProfileRepository
 import java.time.LocalDateTime

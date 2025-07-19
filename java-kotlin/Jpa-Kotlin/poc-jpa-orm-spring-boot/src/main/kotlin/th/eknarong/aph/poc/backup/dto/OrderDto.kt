@@ -1,7 +1,7 @@
 package th.eknarong.aph.poc.backup.dto
 
 import jakarta.validation.constraints.*
-import th.eknarong.aph.poc.pocjpaormspringboot.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.bidirectional.OrderStatus
 import java.math.BigDecimal
 
 data class CreateOrderRequest(
