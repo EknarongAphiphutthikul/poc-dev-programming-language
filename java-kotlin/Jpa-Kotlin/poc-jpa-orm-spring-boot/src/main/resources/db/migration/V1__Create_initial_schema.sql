@@ -1,5 +1,5 @@
 -- Create users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 -- Create user_profiles table (one-to-one with users)
-CREATE TABLE user_profiles (
+CREATE TABLE IF NOT EXISTS user_profiles (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     phone_number VARCHAR(20),
@@ -18,7 +18,7 @@ CREATE TABLE user_profiles (
 );
 
 -- Create products table
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(1000),
@@ -28,7 +28,7 @@ CREATE TABLE products (
 );
 
 -- Create orders table (many-to-one with users)
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_number VARCHAR(100) UNIQUE NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE orders (
 );
 
 -- Create order_products table (many-to-many between orders and products)
-CREATE TABLE order_products (
+CREATE TABLE IF NOT EXISTS order_products (
     order_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     PRIMARY KEY (order_id, product_id),
