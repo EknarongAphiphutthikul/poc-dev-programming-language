@@ -64,7 +64,7 @@ class UserSearchService(
         hasOrdersAbove?.let { amount ->
             val orderSubquery = criteriaQuery.subquery(Long::class.java)
             val orderRoot = orderSubquery.from(Order::class.java)
-            orderSubquery.select(orderRoot.get("user").get("id"))
+            orderSubquery.select(orderRoot.get<User>("user").get("id"))
             orderSubquery.where(
                 criteriaBuilder.and(
                     criteriaBuilder.equal(orderRoot.get<User>("user").get<Long>("id"), root.get<Long>("id")),
@@ -113,7 +113,7 @@ class UserSearchService(
         
         val orderSubquery = criteriaQuery.subquery(Long::class.java)
         val orderRoot = orderSubquery.from(Order::class.java)
-        orderSubquery.select(orderRoot.get("user").get("id"))
+        orderSubquery.select(orderRoot.get<User>("user").get("id"))
         orderSubquery.where(
             criteriaBuilder.and(
                 criteriaBuilder.equal(orderRoot.get<User>("user").get<Long>("id"), root.get<Long>("id")),
