@@ -1,0 +1,141 @@
+package th.eknarong.aph.poc.pocjpaormspringboot.service
+
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import th.eknarong.aph.poc.pocjpaormspringboot.dto.*
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.User
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.UserProfile
+import th.eknarong.aph.poc.pocjpaormspringboot.repository.UserRepository
+import th.eknarong.aph.poc.pocjpaormspringboot.repository.UserProfileRepository
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+@Service
+@Transactional
+class UserService(
+    private val userRepository: UserRepository,
+    private val userProfileRepository: UserProfileRepository
+) {
+    
+    fun createUser(request: CreateUserRequest): UserResponse {
+        // Check if email already exists
+        userRepository.findByEmail(request.email)?.let {
+            throw IllegalArgumentException("User with email ${request.email} already exists")
+        }
+        
+        val user = User(
+            name = request.name,
+            email = request.email,
+            createdAt = LocalDateTime.now()
+        )
+        
+        val savedUser = userRepository.save(user)
+        return mapToUserResponse(savedUser)
+    }
+    
+    fun updateUser(id: Long, request: UpdateUserRequest): UserResponse {
+        val user = userRepository.findById(id)
+            .orElseThrow { IllegalArgumentException("User with id $id not found") }
+        
+        // Check email uniqueness if email is being updated
+        request.email?.let { newEmail ->
+            if (newEmail != user.email) {
+                userRepository.findByEmail(newEmail)?.let {
+                    throw IllegalArgumentException("User with email $newEmail already exists")
+                }
+            }
+        }
+        
+        val updatedUser = user.copy(
+            name = request.name ?: user.name,
+            email = request.email ?: user.email
+        )
+        
+        val savedUser = userRepository.save(updatedUser)
+        return mapToUserResponse(savedUser)
+    }
+    
+    fun createUserProfile(userId: Long, request: CreateUserProfileRequest): UserResponse {
+        val user = userRepository.findById(userId)
+            .orElseThrow { IllegalArgumentException("User with id $userId not found") }
+        
+        // Check if user already has a profile
+        userProfileRepository.findByUserId(userId)?.let {
+            throw IllegalArgumentException("User already has a profile")
+        }
+        
+        val profile = UserProfile(
+            user = user,
+            phoneNumber = request.phoneNumber,
+            birthDate = request.birthDate,
+            bio = request.bio,
+            profilePictureUrl = request.profilePictureUrl
+        )
+        
+        userProfileRepository.save(profile)
+        
+        // Return user with profile
+        val userWithProfile = userRepository.findByIdWithProfile(userId)
+            ?: throw IllegalStateException("Failed to retrieve user with profile")
+        
+        return mapToUserResponse(userWithProfile)
+    }
+    
+    fun updateUserProfile(userId: Long, request: CreateUserProfileRequest): UserResponse {
+        val user = userRepository.findById(userId)
+            .orElseThrow { IllegalArgumentException("User with id $userId not found") }
+        
+        val existingProfile = userProfileRepository.findByUserId(userId)
+            ?: throw IllegalArgumentException("User profile not found")
+        
+        val updatedProfile = existingProfile.copy(
+            phoneNumber = request.phoneNumber,
+            birthDate = request.birthDate,
+            bio = request.bio,
+            profilePictureUrl = request.profilePictureUrl
+        )
+        
+        userProfileRepository.save(updatedProfile)
+        
+        val userWithProfile = userRepository.findByIdWithProfile(userId)
+            ?: throw IllegalStateException("Failed to retrieve user with profile")
+        
+        return mapToUserResponse(userWithProfile)
+    }
+    
+    fun deleteUser(id: Long) {
+        val user = userRepository.findById(id)
+            .orElseThrow { IllegalArgumentException("User with id $id not found") }
+        
+        userRepository.delete(user)
+    }
+    
+    fun getUserById(id: Long): UserResponse {
+        val user = userRepository.findByIdWithProfile(id)
+            ?: throw IllegalArgumentException("User with id $id not found")
+        
+        return mapToUserResponse(user)
+    }
+    
+    fun getAllUsers(): List<UserResponse> {
+        return userRepository.findAll().map { mapToUserResponse(it) }
+    }
+    
+    private fun mapToUserResponse(user: User): UserResponse {
+        return UserResponse(
+            id = user.id!!,
+            name = user.name,
+            email = user.email,
+            createdAt = user.createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+            profile = user.profile?.let { profile ->
+                UserProfileResponse(
+                    id = profile.id!!,
+                    phoneNumber = profile.phoneNumber,
+                    birthDate = profile.birthDate,
+                    bio = profile.bio,
+                    profilePictureUrl = profile.profilePictureUrl
+                )
+            }
+        )
+    }
+}
