@@ -1,10 +1,10 @@
 package th.eknarong.aph.poc.backup.controller
 
 import org.springframework.web.bind.annotation.*
-import th.eknarong.aph.poc.backup.entity.User
-import th.eknarong.aph.poc.backup.entity.Product
-import th.eknarong.aph.poc.backup.entity.Order
-import th.eknarong.aph.poc.backup.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.User
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.Product
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.Order
+import th.eknarong.aph.poc.pocjpaormspringboot.entity.OrderStatus
 import th.eknarong.aph.poc.backup.repository.UserRepository
 import th.eknarong.aph.poc.backup.repository.ProductRepository
 import th.eknarong.aph.poc.backup.repository.OrderRepository

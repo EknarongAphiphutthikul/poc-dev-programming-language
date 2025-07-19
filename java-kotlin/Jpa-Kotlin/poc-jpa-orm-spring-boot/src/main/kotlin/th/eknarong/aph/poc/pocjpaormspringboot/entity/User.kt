@@ -1,4 +1,4 @@
-package th.eknarong.aph.poc.backup.entity
+package th.eknarong.aph.poc.pocjpaormspringboot.entity
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
