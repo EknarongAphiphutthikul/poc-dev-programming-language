@@ -1,8 +1,7 @@
-package th.eknarong.aph.poc.backup
+package th.eknarong.aph.poc.pocjpaormspringboot
 
 import org.springframework.boot.fromApplication
 import org.springframework.boot.with
-import th.eknarong.aph.poc.pocjpaormspringboot.PocJpaOrmSpringBootApplication
 
 
 fun main(args: Array<String>) {

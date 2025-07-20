@@ -1,4 +1,4 @@
-package th.eknarong.aph.poc.backup
+package th.eknarong.aph.poc.pocjpaormspringboot
 
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
@@ -12,7 +12,7 @@ class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     fun mysqlContainer(): MySQLContainer<*> {
-        return MySQLContainer(DockerImageName.parse("mysql:latest"))
+        return MySQLContainer(DockerImageName.parse("mysql:8.0"))
     }
 
 }

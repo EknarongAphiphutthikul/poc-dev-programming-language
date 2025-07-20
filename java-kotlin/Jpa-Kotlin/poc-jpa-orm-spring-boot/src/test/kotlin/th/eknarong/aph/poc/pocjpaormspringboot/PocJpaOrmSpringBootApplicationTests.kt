@@ -1,4 +1,4 @@
-package th.eknarong.aph.poc.backup
+package th.eknarong.aph.poc.pocjpaormspringboot
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
