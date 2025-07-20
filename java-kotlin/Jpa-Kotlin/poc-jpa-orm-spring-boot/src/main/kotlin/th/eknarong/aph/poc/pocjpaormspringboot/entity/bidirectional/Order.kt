@@ -6,27 +6,27 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "orders")
-data class Order(
+class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null,
     
     @Column(name = "order_number", unique = true, nullable = false)
-    val orderNumber: String,
+    var orderNumber: String,
     
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
-    val totalAmount: BigDecimal,
+    var totalAmount: BigDecimal,
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: OrderStatus,
+    var status: OrderStatus,
     
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    var user: User,
     
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -34,7 +34,7 @@ data class Order(
         joinColumns = [JoinColumn(name = "order_id")],
         inverseJoinColumns = [JoinColumn(name = "product_id")]
     )
-    val products: List<Product> = emptyList()
+    var products: MutableList<Product> = mutableListOf()
 )
 
 enum class OrderStatus {

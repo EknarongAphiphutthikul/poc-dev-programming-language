@@ -6,26 +6,26 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "products")
-data class Product(
+class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null,
     
     @Column(nullable = false)
-    val name: String,
+    var name: String,
     
     @Column(length = 1000)
-    val description: String?,
+    var description: String?,
     
     @Column(nullable = false, precision = 10, scale = 2)
-    val price: BigDecimal,
+    var price: BigDecimal,
     
     @Column(name = "stock_quantity", nullable = false)
-    val stockQuantity: Int,
+    var stockQuantity: Int,
     
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
-    val orders: List<Order> = emptyList()
+    var orders: MutableList<Order> = mutableListOf()
 )

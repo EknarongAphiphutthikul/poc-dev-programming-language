@@ -4,25 +4,25 @@ import jakarta.persistence.*
 import java.time.LocalDate
 
 @Entity
-@Table(name = "user_profiles")
-data class UserProfile(
+@Table(name = "user_profiles") 
+class UserProfile(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null,
     
     @Column(name = "phone_number")
-    val phoneNumber: String?,
+    var phoneNumber: String?,
     
     @Column(name = "birth_date")
-    val birthDate: LocalDate?,
+    var birthDate: LocalDate?,
     
     @Column(length = 500)
-    val bio: String?,
+    var bio: String?,
     
     @Column(name = "profile_picture_url")
-    val profilePictureUrl: String?,
+    var profilePictureUrl: String?,
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User
+    var user: User
 )

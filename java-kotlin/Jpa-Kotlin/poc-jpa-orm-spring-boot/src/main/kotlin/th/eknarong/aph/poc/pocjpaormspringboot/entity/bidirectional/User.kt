@@ -5,23 +5,23 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null,
     
     @Column(unique = true, nullable = false)
-    val email: String,
+    var email: String,
     
     @Column(nullable = false)
-    val name: String,
+    var name: String,
     
     @Column(name = "created_at", nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     
     @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val profile: UserProfile? = null,
+    var profile: UserProfile? = null,
     
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val orders: List<Order> = emptyList()
+    var orders: MutableList<Order> = mutableListOf()
 )
