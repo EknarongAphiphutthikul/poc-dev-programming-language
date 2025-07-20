@@ -19,9 +19,9 @@ interface UserRepository : JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.createdAt >= :startDate")
     fun findUsersCreatedAfter(@Param("startDate") startDate: LocalDateTime): List<User>
     
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.profile WHERE u.id = :id")
+    @Query("""SELECT u FROM User u LEFT JOIN FETCH UserProfile up ON (u.id = up.user.id) WHERE up.id = :id""")
     fun findByIdWithProfile(@Param("id") id: Long): User?
-    
+
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.orders WHERE u.id = :id")
     fun findByIdWithOrders(@Param("id") id: Long): User?
     
@@ -34,6 +34,9 @@ interface UserRepository : JpaRepository<User, Long> {
     """)
     fun findUsersWithOrdersAboveAmount(@Param("minAmount") minAmount: java.math.BigDecimal): List<User>
     
-    @Query("SELECT COUNT(u) FROM User u WHERE u.profile IS NOT NULL")
+    @Query("""
+        SELECT COUNT(u) FROM User u 
+        WHERE u.id IN ( SELECT up.user.id FROM UserProfile up)
+    """)
     fun countUsersWithProfile(): Long
 }

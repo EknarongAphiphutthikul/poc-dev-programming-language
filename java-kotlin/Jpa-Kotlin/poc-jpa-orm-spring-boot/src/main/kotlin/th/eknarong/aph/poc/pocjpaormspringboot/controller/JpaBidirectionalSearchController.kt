@@ -38,7 +38,8 @@ class JpaBidirectionalSearchController(
     
     @GetMapping("/users/by-email")
     fun getUserByEmail(@RequestParam email: String): User? {
-        return userRepository.findByEmail(email)
+        val dataFound = userRepository.findByEmail(email)
+        return dataFound
     }
     
     @GetMapping("/users/by-name")
@@ -317,7 +318,7 @@ class JpaBidirectionalSearchController(
         val user = userRepository.findByEmail("john.doe@example.com")
         val userWithProfile = userRepository.findByIdWithProfile(user?.id ?: 1)
         val userWithOrders = userRepository.findByIdWithOrders(user?.id ?: 1)
-        
+
         return mapOf(
             "user" to user,
             "userWithProfile" to userWithProfile,
