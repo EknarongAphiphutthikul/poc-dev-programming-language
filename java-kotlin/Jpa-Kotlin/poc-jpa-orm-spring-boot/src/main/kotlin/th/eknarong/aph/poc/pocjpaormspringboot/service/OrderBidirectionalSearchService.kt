@@ -12,7 +12,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Service
-class OrderSearchService(
+class OrderBidirectionalSearchService(
     private val entityManager: EntityManager
 ) {
     
