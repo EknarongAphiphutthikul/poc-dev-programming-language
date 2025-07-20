@@ -6,6 +6,7 @@ import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Order
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Product
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.User
+import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.UserProfile
 import th.eknarong.aph.poc.pocjpaormspringboot.service.OrderBidirectionalSearchService
 import th.eknarong.aph.poc.pocjpaormspringboot.service.ProductBidirectionalSearchService
 import th.eknarong.aph.poc.pocjpaormspringboot.service.UserBidirectionalSearchService
@@ -18,6 +19,7 @@ import th.eknarong.aph.poc.pocjpaormspringboot.service.OrderStatusCount
 import th.eknarong.aph.poc.pocjpaormspringboot.service.ProductSalesStats
 import th.eknarong.aph.poc.pocjpaormspringboot.service.UserOrderStats
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @RestController
@@ -198,6 +200,114 @@ class JpaSearchController(
     @GetMapping("/orders/status-counts")
     fun getOrderStatusCounts(): List<OrderStatusCount> {
         return orderSearchService.getOrdersByStatusCount()
+    }
+    
+    // === Additional Repository Functions ===
+    
+    @GetMapping("/users/created-after")
+    fun getUsersCreatedAfter(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) startDate: LocalDateTime
+    ): List<User> {
+        return userRepository.findUsersCreatedAfter(startDate)
+    }
+    
+    @GetMapping("/users/count-with-profile")
+    fun countUsersWithProfile(): Long {
+        return userRepository.countUsersWithProfile()
+    }
+    
+    @GetMapping("/orders/by-amount-range")
+    fun getOrdersByTotalAmountRange(
+        @RequestParam minAmount: BigDecimal,
+        @RequestParam maxAmount: BigDecimal
+    ): List<Order> {
+        return orderRepository.findByTotalAmountBetween(minAmount, maxAmount)
+    }
+    
+    @GetMapping("/orders/{id}/with-user")
+    fun getOrderWithUser(@PathVariable id: Long): Order? {
+        return orderRepository.findByIdWithUser(id)
+    }
+    
+    @GetMapping("/orders/between-dates")
+    fun getOrdersBetweenDates(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) startDate: LocalDateTime,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) endDate: LocalDateTime
+    ): List<Order> {
+        return orderRepository.findOrdersBetweenDates(startDate, endDate)
+    }
+    
+    @GetMapping("/orders/by-user-email-and-status")
+    fun getOrdersByUserEmailAndStatus(
+        @RequestParam email: String,
+        @RequestParam status: OrderStatus
+    ): List<Order> {
+        return orderRepository.findByUserEmailAndStatus(email, status)
+    }
+    
+    @GetMapping("/products/with-stock-above")
+    fun getProductsWithStockAbove(@RequestParam minStock: Int): List<Product> {
+        return productRepository.findByStockQuantityGreaterThan(minStock)
+    }
+    
+    @GetMapping("/products/in-order/{orderId}")
+    fun getProductsInOrder(@PathVariable orderId: Long): List<Product> {
+        return productRepository.findProductsInOrder(orderId)
+    }
+    
+    @GetMapping("/products/count-above-price")
+    fun countProductsAbovePrice(@RequestParam price: BigDecimal): Long {
+        return productRepository.countProductsAbovePrice(price)
+    }
+    
+    @GetMapping("/products/all-by-price-desc")
+    fun getAllProductsByPriceDesc(): List<Product> {
+        return productRepository.findAllOrderByPriceDesc()
+    }
+    
+    @GetMapping("/orders/containing-product-criteria/{productId}")
+    fun getOrdersContainingProductCriteria(@PathVariable productId: Long): List<Order> {
+        return orderSearchService.getOrdersContainingProduct(productId)
+    }
+
+    @GetMapping("/products/with-user-id/{userId}")
+    fun getProductsWithUserId(@PathVariable userId: Long): List<Product> {
+        return productRepository.findProductsOrderedByUser(userId)
+    }
+    
+    // === UserProfile Repository Functions ===
+    
+    @GetMapping("/user-profiles/by-user/{userId}")
+    fun getUserProfileByUserId(@PathVariable userId: Long): UserProfile? {
+        return userProfileRepository.findByUserId(userId)
+    }
+    
+    @GetMapping("/user-profiles/by-phone")
+    fun getUserProfileByPhoneNumber(@RequestParam phoneNumber: String): UserProfile? {
+        return userProfileRepository.findByPhoneNumber(phoneNumber)
+    }
+    
+    @GetMapping("/user-profiles/by-birth-date-range")
+    fun getUserProfilesByBirthDateRange(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate
+    ): List<UserProfile> {
+        return userProfileRepository.findByBirthDateBetween(startDate, endDate)
+    }
+    
+    @GetMapping("/user-profiles/with-bio")
+    fun getUserProfilesWithBio(): List<UserProfile> {
+        return userProfileRepository.findProfilesWithBio()
+    }
+    
+    @GetMapping("/user-profiles/{id}/with-user")
+    fun getUserProfileWithUser(@PathVariable id: Long): UserProfile? {
+        return userProfileRepository.findByIdWithUser(id)
+    }
+    
+    @GetMapping("/user-profiles/count-with-picture")
+    fun countUserProfilesWithPicture(): Long {
+        return userProfileRepository.countProfilesWithPicture()
     }
     
     // === Relationship Examples ===
