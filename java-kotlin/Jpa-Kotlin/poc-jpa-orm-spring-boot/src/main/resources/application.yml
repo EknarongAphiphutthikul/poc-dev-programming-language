@@ -21,6 +21,24 @@ spring:
       connection-timeout: 30000
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
 
 management:
   endpoints:

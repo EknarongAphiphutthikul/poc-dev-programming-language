@@ -23,8 +23,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @RestController
-@RequestMapping("/api/jpa-examples")
-class JpaSearchController(
+@RequestMapping("/api/search-bidirectional")
+class JpaBidirectionalSearchController(
         private val userRepository: UserRepository,
         private val orderRepository: OrderRepository,
         private val productRepository: ProductRepository,
