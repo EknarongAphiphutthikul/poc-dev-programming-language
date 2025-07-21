@@ -1,5 +1,6 @@
 package th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 import java.math.BigDecimal
@@ -26,7 +27,8 @@ class Product(
     
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime? = null,
-    
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     var orders: MutableList<Order>? = null
 ) {

@@ -24,12 +24,14 @@ class User(
     // @JsonIgnore ignores this field when serializing to JSON
     // because return entity to client side, it loads table user profile
     @JsonIgnore
-    // mappedBy not working because fk is in UserProfile table
+    // mappedBy not working because fk is in UserProfile table, lazy loading is not working
+    // @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
     @JoinColumn(name = "id", referencedColumnName = "user_id")
     var profile: UserProfile? = null,
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var orders: MutableList<Order>? = null
 ) {
     override fun equals(other: Any?): Boolean {

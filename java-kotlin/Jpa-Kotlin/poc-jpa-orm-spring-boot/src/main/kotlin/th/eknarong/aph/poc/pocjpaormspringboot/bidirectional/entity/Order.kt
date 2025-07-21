@@ -1,5 +1,6 @@
 package th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 import java.math.BigDecimal
@@ -24,11 +25,13 @@ class Order(
     
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime? = null,
-    
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     var user: User? = null,
-    
+
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "order_products",

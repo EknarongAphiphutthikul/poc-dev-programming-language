@@ -1,6 +1,7 @@
 package th.eknarong.aph.poc.pocjpaormspringboot.controller
 
 import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Order
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
@@ -68,8 +69,26 @@ class JpaBidirectionalSearchController(
     }
     
     @GetMapping("/orders/by-status")
+    @Transactional
     fun getOrdersByStatus(@RequestParam status: OrderStatus): List<Order> {
-        return orderRepository.findByStatus(status)
+        val dataFound = orderRepository.findByStatus(status)
+        if (dataFound.isNotEmpty()) {
+            // test load lazy loading
+            dataFound.forEach { order ->
+                order.user?.let {
+                    println("Order ID: ${order.id}, User: ${it.name}, Status: ${order.status}")
+                }
+
+                order.products?.forEach { product ->
+                    println("Order ID: ${order.id}, Product: ${product.name}, Price: ${product.price}")
+
+                    product.orders?.forEach { order ->
+                        println("Product ID: ${product.id}, Order ID: ${order.id}, Total Amount: ${order.totalAmount}")
+                    }
+                }
+            }
+        }
+        return dataFound
     }
     
     @GetMapping("/orders/{id}/with-products")
@@ -88,8 +107,18 @@ class JpaBidirectionalSearchController(
     }
     
     @GetMapping("/products/by-name")
+    @Transactional
     fun getProductsByName(@RequestParam name: String): List<Product> {
-        return productRepository.findByNameContaining(name)
+        val foundData = productRepository.findByNameContaining(name)
+        if (foundData.isNotEmpty()) {
+            // test load lazy loading
+            foundData.forEach { product ->
+                product.orders?.forEach { order ->
+                    println("Product ID: ${product.id}, Order ID: ${order.id}, Total Amount: ${order.totalAmount}")
+                }
+            }
+        }
+        return foundData
     }
     
     @GetMapping("/products/by-price-range")
