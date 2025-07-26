@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Order
-import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.model.OrderStatus
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Product
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.User
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.UserProfile

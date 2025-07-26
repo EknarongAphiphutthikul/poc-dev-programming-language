@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.JoinType
 import jakarta.persistence.criteria.Predicate
 import org.springframework.stereotype.Service
-import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.model.OrderStatus
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Product
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.User
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Order

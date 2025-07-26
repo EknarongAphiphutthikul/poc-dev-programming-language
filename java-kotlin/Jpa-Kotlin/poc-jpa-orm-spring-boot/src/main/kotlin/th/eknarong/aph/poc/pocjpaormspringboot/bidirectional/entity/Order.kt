@@ -3,6 +3,7 @@ package th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.hibernate.Hibernate
+import th.eknarong.aph.poc.pocjpaormspringboot.model.OrderStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -54,12 +55,4 @@ class Order(
     override fun toString(): String {
         return this::class.simpleName + "(id = $id , orderNumber = $orderNumber , totalAmount = $totalAmount , status = $status , createdAt = $createdAt )"
     }
-}
-
-enum class OrderStatus {
-    PENDING,
-    PROCESSING,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED
 }

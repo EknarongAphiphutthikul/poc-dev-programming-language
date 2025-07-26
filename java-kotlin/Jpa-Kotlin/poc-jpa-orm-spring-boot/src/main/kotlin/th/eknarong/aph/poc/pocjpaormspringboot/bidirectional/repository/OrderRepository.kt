@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.Order
-import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.model.OrderStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 

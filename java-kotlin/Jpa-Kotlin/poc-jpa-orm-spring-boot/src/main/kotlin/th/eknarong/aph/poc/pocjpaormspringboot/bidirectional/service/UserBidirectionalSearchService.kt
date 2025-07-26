@@ -3,7 +3,7 @@ package th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.service
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.*
 import org.springframework.stereotype.Service
-import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.OrderStatus
+import th.eknarong.aph.poc.pocjpaormspringboot.model.OrderStatus
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.User
 import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.entity.UserProfile
 import java.math.BigDecimal
