@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: poc-mongodb
+    restart: always
+    ports:
+      - "27030:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: poc_db
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/config:/data/configdb
+      - ./mongodb/logs:/var/log/mongodb
+    networks:
+      - poc-network
+
+networks:
+  poc-network:
+    driver: bridge
