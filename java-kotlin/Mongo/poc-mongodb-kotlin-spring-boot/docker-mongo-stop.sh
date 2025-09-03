@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Stopping MongoDB container..."
-docker-compose stop mongodb
+docker-compose stop
 
 # Check if container is stopped
 if ! docker ps | grep -q "poc-mongodb"; then

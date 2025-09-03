@@ -7,7 +7,7 @@ mkdir -p ./mongodb/logs
 
 # Start MongoDB with Docker Compose
 echo "Starting MongoDB container..."
-docker-compose up -d mongodb
+docker-compose up -d
 
 # Wait for MongoDB to be ready
 echo "Waiting for MongoDB to be ready..."

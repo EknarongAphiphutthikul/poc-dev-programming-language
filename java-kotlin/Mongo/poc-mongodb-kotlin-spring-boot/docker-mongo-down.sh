@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Stopping and removing MongoDB container..."
-docker-compose down
+docker compose down --volumes
 
 # Check if container is stopped
 if ! docker ps | grep -q "poc-mongodb"; then
@@ -10,3 +10,5 @@ else
     echo "Failed to stop MongoDB container"
     exit 1
 fi
+
+rm -rf ./mongodb

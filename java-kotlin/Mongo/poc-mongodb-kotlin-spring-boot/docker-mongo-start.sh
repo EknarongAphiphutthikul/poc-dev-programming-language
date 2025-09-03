@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Starting existing MongoDB container..."
-docker-compose start mongodb
+docker-compose start
 
 # Wait for MongoDB to be ready
 echo "Waiting for MongoDB to be ready..."
