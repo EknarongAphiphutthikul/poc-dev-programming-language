@@ -9,7 +9,6 @@ import th.eknarong.aph.poc.pocjpaormspringboot.bidirectional.repository.UserRepo
 import th.eknarong.aph.poc.pocjpaormspringboot.model.CreateUserProfileRequest
 import th.eknarong.aph.poc.pocjpaormspringboot.model.CreateUserRequest
 import th.eknarong.aph.poc.pocjpaormspringboot.model.UpdateUserRequest
-import th.eknarong.aph.poc.pocjpaormspringboot.model.UserProfileResponse
 import th.eknarong.aph.poc.pocjpaormspringboot.model.UserResponse
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -129,15 +128,7 @@ class UserService(
             name = user.name!!,
             email = user.email!!,
             createdAt = user.createdAt!!.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-            profile = user.profile?.let { profile ->
-                UserProfileResponse(
-                        id = profile.id!!,
-                        phoneNumber = profile.phoneNumber,
-                        birthDate = profile.birthDate,
-                        bio = profile.bio,
-                        profilePictureUrl = profile.profilePictureUrl
-                )
-            }
+            profile = null
         )
     }
 }

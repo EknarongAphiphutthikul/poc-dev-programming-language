@@ -23,12 +23,10 @@ class User(
 
     // @JsonIgnore ignores this field when serializing to JSON
     // because return entity to client side, it loads table user profile
-    @JsonIgnore
+    // @JsonIgnore
     // mappedBy not working because fk is in UserProfile table, lazy loading is not working
     // @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
-    var profile: UserProfile? = null,
+    // var profile: UserProfile? = null,
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
